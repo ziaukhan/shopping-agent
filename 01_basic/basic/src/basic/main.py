@@ -1,9 +1,13 @@
 import asyncio
 import os
 from dotenv import load_dotenv
-from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.messages import TextMessage
 from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_agentchat.teams import RoundRobinGroupChat
+
+# Doc Ref: https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html#using-max-turns
 
 # Load the environment variables from the .env file
 load_dotenv()
@@ -41,10 +45,30 @@ agent: AssistantAgent = AssistantAgent(
     model_client_stream=True,  # Enable streaming tokens from the model client.
 )
 
+# Create the team setting a maximum number of turns to 1.
+team = RoundRobinGroupChat([agent], max_turns=1)
+
+async def conversation_loop():
+    print("Weather Chat session started! Type 'exit' or 'quit' to end the conversation.\n")
+    # Loop indefinitely to simulate back-and-forth conversation.
+    while True:
+        # Get user input from the command line.
+        user_input = input("You: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("Ending conversation.")
+            break
+
+        # Run the conversation and stream to the console.
+        stream = team.run_stream(task=user_input)
+        
+        await Console(stream)
+    
+
 
 # Run the agent and stream the messages to the console.
 async def main() -> None:
-    await Console(agent.run_stream(task="What is the weather in New York?"))
+    await conversation_loop()
+
 
 def run_main():
     asyncio.run(main())
