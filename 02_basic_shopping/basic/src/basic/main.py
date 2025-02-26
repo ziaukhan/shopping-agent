@@ -46,12 +46,22 @@ shopping_cart: list[Product] = []
 
 
 async def get_products_in_inventory()-> list[Product]:
-    """Get all the products in the inventory."""
+    """Get all the products in the inventory.
+
+       Returns:list[Product] List of Products
+    """
     return product_inventory
 
 
 async def search_product_in_inventory(product_name: str) -> Optional[Product]:
-    """Searches the product in product catalog/inventory and return if it is in the inventory."""
+    """Searches the product in product catalog/inventory and return if it is in the inventory.
+    
+    Parameters:
+    product_name (str): the name of the product to search
+
+    Returns:
+    Product:Product value if found or None
+    """
     for p in product_inventory:
         if(p.name.lower() == product_name.lower()):
             if(p.quantity >= 1):
@@ -60,14 +70,22 @@ async def search_product_in_inventory(product_name: str) -> Optional[Product]:
     
 
 async def add_to_shopping_cart(product: Product):
-    """Add this product/item to shopping cart."""
+    """Add an object of type product to the shopping cart.
+
+    Parameters:
+    product (Product): the product type to add in shopping cart
+    
+    """
     shopping_cart.append(product)
     for p in product_inventory:
         if(p.name.lower() == product.name.lower()):
             p.quantity = p.quantity - product.quantity
     
 async def get_shopping_cart() -> list[Product]:
-    """Get all the products and items in the shopping cart."""
+    """Get all the products and items in the shopping cart.
+    Returns:
+    list[Product]:A list of Products contained in the shopping cart 
+    """
     return shopping_cart
 
 
