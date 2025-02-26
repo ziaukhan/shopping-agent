@@ -10,7 +10,6 @@ requires-python = ">=3.12"
 dependencies = [
     "autogen-agentchat>=0.4.7",
     "autogen-ext[openai]>=0.4.7",
-    "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
 ]
 

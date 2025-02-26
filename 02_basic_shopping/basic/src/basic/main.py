@@ -6,8 +6,7 @@ from autogen_agentchat.messages import TextMessage
 from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 from autogen_agentchat.teams import RoundRobinGroupChat
-from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, TypedDict
 
 # Doc Ref: https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html#using-max-turns
 
@@ -28,7 +27,7 @@ model_client: OpenAIChatCompletionClient = OpenAIChatCompletionClient(
     api_key=gemini_api_key,
 )
 
-class Product(BaseModel):
+class Product(TypedDict):
     """
     Product model for representing product data.
 
@@ -40,6 +39,7 @@ class Product(BaseModel):
     name: str
     quantity: int
     price: float
+    
 
 product_inventory: list[Product] = [Product(name="shoes", quantity=6, price=5), Product(name="shirts", quantity=2, price=10)]
 shopping_cart: list[Product] = []
@@ -63,8 +63,8 @@ async def search_product_in_inventory(product_name: str) -> Optional[Product]:
     Product:Product value if found or None
     """
     for p in product_inventory:
-        if(p.name.lower() == product_name.lower()):
-            if(p.quantity >= 1):
+        if(p["name"].lower() == product_name.lower()):
+            if(p["quantity"] >= 1):
                 return p
     return None
     
@@ -78,8 +78,8 @@ async def add_to_shopping_cart(product: Product):
     """
     shopping_cart.append(product)
     for p in product_inventory:
-        if(p.name.lower() == product.name.lower()):
-            p.quantity = p.quantity - product.quantity
+        if(p["name"].lower() == product["name"].lower()):
+            p["quantity"] = p["quantity"] - product["quantity"]
     
 async def get_shopping_cart() -> list[Product]:
     """Get all the products and items in the shopping cart.

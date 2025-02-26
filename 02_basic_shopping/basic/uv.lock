@@ -88,7 +88,6 @@ source = { editable = "." }
 dependencies = [
     { name = "autogen-agentchat" },
     { name = "autogen-ext", extra = ["openai"] },
-    { name = "pydantic" },
     { name = "python-dotenv" },
 ]
 
@@ -96,7 +95,6 @@ dependencies = [
 requires-dist = [
     { name = "autogen-agentchat", specifier = ">=0.4.7" },
     { name = "autogen-ext", extras = ["openai"], specifier = ">=0.4.7" },
-    { name = "pydantic", specifier = ">=2.10.6" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
 ]
 
