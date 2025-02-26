@@ -27,6 +27,7 @@ model_client: OpenAIChatCompletionClient = OpenAIChatCompletionClient(
     api_key=gemini_api_key,
 )
 
+# Why did we use TypedDict here, please read the readme.md file in project
 class Product(TypedDict):
     """
     Product model for representing product data.
